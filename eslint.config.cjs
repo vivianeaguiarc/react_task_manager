@@ -41,6 +41,8 @@ module.exports = [
   // 1. Ignorar arquivos
   {
     ignores: ['dist', '.eslintrc.cjs', 'node_modules'],
+    parserOptions: { ecmaVersion: "latest", sourceType: "module" },
+    settings: { react: { version: '18.2' } },
   },
 
   // 2. Configuração Base
@@ -66,9 +68,6 @@ module.exports = [
       },
     },
 
-    // C. Configurações Compartilhadas (Extends)
-    // NOTE: Se o plugin não exportar o objeto de Flat Config corretamente, 
-    // você tem que aplicar as regras manualmente, ou usar o objeto exportado.
     ...js.configs.recommended, 
     
     // D. Settings
@@ -80,14 +79,15 @@ module.exports = [
 
     // E. Regras (Incluindo as regras de Hooks e Refresh)
     rules: {
-      // Regras que substituem 'plugin:react/recommended' e 'plugin:react/jsx-runtime'
-      // Se não quiser reescrever todas as regras, use o objeto de configuração correto do plugin
-      
+      "eslint: recommended": "error",
+      "plugin:react/recommended": "off",
+      "plugin:react-hooks/recommended": "off",
+      "prettier/prettier": "off",
+      // Regras do React (Substituindo 'plugin:react/recommended')
       'react/jsx-no-target-blank': 'off',
       // Regras de Hooks (Substituindo 'plugin:react-hooks/recommended')
       'react-hooks/rules-of-hooks': 'error', 
       'react-hooks/exhaustive-deps': 'warn', 
-      
       // Regra de Refresh
       'react-refresh/only-export-components': [
         'warn',
