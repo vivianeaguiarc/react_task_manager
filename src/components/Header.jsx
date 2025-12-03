@@ -1,4 +1,4 @@
-function Header(props){
-    return <header>{props.children}</header>
+function Header(props) {
+  return <header>{props.children}</header>
 }
-export default Header;
+export default Header

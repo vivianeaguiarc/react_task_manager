@@ -28,73 +28,67 @@
 //   },
 // ])
 
-// eslint.config.cjs
-const js = require('@eslint/js');
-const globals = require('globals');
+const js = require("@eslint/js")
+const globals = require("globals")
 
 // Plugins
-const reactPlugin = require('eslint-plugin-react');
-const reactHooks = require('eslint-plugin-react-hooks');
-const reactRefresh = require('eslint-plugin-react-refresh');
+const reactPlugin = require("eslint-plugin-react")
+const reactHooks = require("eslint-plugin-react-hooks")
+const reactRefresh = require("eslint-plugin-react-refresh")
 
 module.exports = [
   // 1. Ignorar arquivos
   {
-    ignores: ['dist', '.eslintrc.cjs', 'node_modules'],
-    parserOptions: { ecmaVersion: "latest", sourceType: "module" },
-    settings: { react: { version: '18.2' } },
+    ignores: ["dist", ".eslintrc.cjs", "node_modules"],
   },
 
   // 2. Configuração Base
   {
-    files: ['**/*.{js,jsx,mjs,cjs}'], 
-    
-    // A. Plugins (registro - FORMATO CORRETO DO FLAT CONFIG)
+    files: ["**/*.{js,jsx,mjs,cjs}"],
+
+    // A. Plugins (Flat Config)
     plugins: {
       react: reactPlugin,
-      'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
+      "react-hooks": reactHooks,
+      "react-refresh": reactRefresh,
     },
-    
-    // B. Linguagem/Ambiente e Parser
+
+    // B. Opções de linguagem (AQUI que entra parserOptions!)
     languageOptions: {
       globals: globals.browser,
-      ecmaVersion: 2020,
-      sourceType: 'module',
-      
       parserOptions: {
-        ecmaVersion: 'latest',
+        ecmaVersion: "latest",
+        sourceType: "module",
         ecmaFeatures: { jsx: true },
       },
     },
 
-    ...js.configs.recommended, 
-    
+    // C. Recomendações padrão do ESLint
+    ...js.configs.recommended,
+
     // D. Settings
     settings: {
-      react: { 
-        version: '18.2'
-      },
+      react: { version: "18.2" },
     },
 
-    // E. Regras (Incluindo as regras de Hooks e Refresh)
+    // E. Regras
     rules: {
-      "eslint: recommended": "error",
-      "plugin:react/recommended": "off",
-      "plugin:react-hooks/recommended": "off",
-      "prettier/prettier": "off",
-      // Regras do React (Substituindo 'plugin:react/recommended')
-      'react/jsx-no-target-blank': 'off',
-      // Regras de Hooks (Substituindo 'plugin:react-hooks/recommended')
-      'react-hooks/rules-of-hooks': 'error', 
-      'react-hooks/exhaustive-deps': 'warn', 
-      // Regra de Refresh
-      'react-refresh/only-export-components': [
-        'warn',
+      // Regras React
+      "react/jsx-no-target-blank": "off",
+
+      // Hooks
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+
+      // Refresh
+      "react-refresh/only-export-components": [
+        "warn",
         { allowConstantExport: true },
       ],
-      // Adicione outras regras do React que você precisa aqui
-      // Exemplo: 'react/react-in-jsx-scope': 'off', 
+
+      // Outras regras opcionais
+      "no-unused-vars": "warn",
+      "no-undef": "warn",
     },
   },
-];
+]

@@ -1,10 +1,10 @@
-import Tasks from "./components/Tasks";
+import Tasks from "./components/Tasks"
 
-function App(){
+function App() {
   return (
     <>
-      <Tasks /> 
+      <h1 className="text-red-500">Task Manager</h1>
     </>
   )
 }
-export default App;
+export default App
