@@ -1,24 +1,33 @@
-// eslint-disable-next-line no-unused-vars
+/* eslint-disable no-unused-vars */
 import SidebarButton from "./SidebarButton"
+import HomeIcon from "../assets/icons/home.min.svg?react"
+import TaskIcon from "../assets/icons/tasks.min.svg?react"
 
-const SideBar = () => {
+const Sidebar = () => {
   return (
-    <>
-      <div className="h-screen w-64 bg-white">
-        <div className="space-y-4 px-8 py-6">
-          <h1 className="text-xl font-semibold text-[#00ADB5]">Task Manager</h1>
-          <p>
-            Um simples{" "}
-            <span className="text-[#00ADB5]">organizador de tarefas</span>
-          </p>
-        </div>
-        <div className="flex flex-col gap-2 p-2">
-          <SidebarButton variant="unselected">Início</SidebarButton>
-          <SidebarButton variant="selected">Minhas Tarefas</SidebarButton>
-        </div>
+    <div className="h-screen w-64 bg-white">
+      <div className="space-y-4 px-8 py-6">
+        <h1 className="text-xl font-semibold text-[#00ADB5]">Task Manager</h1>
+
+        <p>
+          Um simples{" "}
+          <span className="text-[#00ADB5]">organizador de tarefas</span>.
+        </p>
       </div>
-    </>
+
+      <div className="flex flex-col gap-2 p-2">
+        <SidebarButton variant="unselected">
+          <HomeIcon />
+          Início
+        </SidebarButton>
+
+        <SidebarButton variant="selected">
+          <TaskIcon />
+          Minhas Tarefas
+        </SidebarButton>
+      </div>
+    </div>
   )
 }
 
-export default SideBar
+export default Sidebar
