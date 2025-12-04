@@ -1,4 +1,5 @@
-const Button = ({ children, variant = "primary" }) => {
+/* eslint-disable no-unused-vars */
+const Button = ({ children, variant = "primary", ...rest }) => {
   const getVariantClasses = () => {
     switch (variant) {
       case "primary":
@@ -12,6 +13,7 @@ const Button = ({ children, variant = "primary" }) => {
   return (
     <button
       className={`flex items-center gap-2 rounded-md px-3 py-1 text-xs font-semibold transition hover:opacity-80 ${getVariantClasses()}`}
+      {...rest}
     >
       {children}
     </button>

@@ -10,7 +10,6 @@ import TasksSeparator from "./TaskSeparator"
 import { useState } from "react"
 import TASKS from "../constants/tasks"
 import TaskItem from "./TaskItem"
-import { set } from "react-hook-form"
 
 const Tasks = () => {
   const [tasks, setTasks] = useState(TASKS)
@@ -19,7 +18,12 @@ const Tasks = () => {
   const afternoonTasks = tasks.filter((task) => task.time === "afternoon")
   const nightTasks = tasks.filter((task) => task.time === "evening")
 
-  const handleCheckBoxChange = (taskId) => {
+  const handleDeleteClick = (taskId) => {
+    const newTasks = tasks.filter((task) => task.id !== taskId)
+    setTasks(newTasks)
+  }
+
+  const handleTaskCheckBoxChange = (taskId) => {
     const newTasks = tasks.map((task) => {
       if (task.id !== taskId) {
         return task
@@ -69,7 +73,8 @@ const Tasks = () => {
             <TaskItem
               key={task.id}
               task={task}
-              handleCheckBoxChange={handleCheckBoxChange}
+              handleCheckBoxChange={handleTaskCheckBoxChange}
+              handleDeleteClick={handleDeleteClick}
             />
           ))}
         </div>
@@ -81,7 +86,8 @@ const Tasks = () => {
             <TaskItem
               key={task.id}
               task={task}
-              handleCheckBoxChange={handleCheckBoxChange}
+              handleCheckBoxChange={handleTaskCheckBoxChange}
+              handleDeleteClick={handleDeleteClick}
             />
           ))}
         </div>
@@ -93,7 +99,8 @@ const Tasks = () => {
             <TaskItem
               key={task.id}
               task={task}
-              handleCheckBoxChange={handleCheckBoxChange}
+              handleCheckBoxChange={handleTaskCheckBoxChange}
+              handleDeleteClick={handleDeleteClick}
             />
           ))}
         </div>
