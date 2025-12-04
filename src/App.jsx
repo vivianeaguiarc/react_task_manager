@@ -1,8 +1,12 @@
+// eslint-disable-next-line no-unused-vars
+import SideBar from "./components/SideBar"
+
 function App() {
   return (
     <>
-      <h1 className="text-red-500">Task Manager</h1>
+      <SideBar />
     </>
   )
 }
+
 export default App
