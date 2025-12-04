@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 
 import {
-  TrashIcon,
   CheckIcon,
-  LoaderIcon,
   DetailsIcon,
+  LoaderIcon,
+  TrashIcon,
 } from "./assets/icons/index.js"
 import Button from "./Button"
 

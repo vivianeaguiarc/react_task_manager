@@ -51,6 +51,7 @@ module.exports = [
       react: reactPlugin,
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
+      "simple-import-sort": require("eslint-plugin-simple-import-sort"),
     },
 
     // B. Opções de linguagem (AQUI que entra parserOptions!)
@@ -89,6 +90,8 @@ module.exports = [
       // Outras regras opcionais
       "no-unused-vars": "warn",
       "no-undef": "warn",
+      "simple-import-sort/imports": "warn",
+      "simple-import-sort/exports": "warn",
     },
   },
 ]

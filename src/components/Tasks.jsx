@@ -1,18 +1,18 @@
 /* eslint-disable no-unused-vars */
+import { useState } from "react"
+import { toast } from "sonner"
 
-import Button from "./Button"
+import TASKS from "../constants/tasks"
 import {
-  TrashIcon,
   AddIcon,
-  SunIcon,
   CloudSunIcon,
   MoonIcon,
+  SunIcon,
+  TrashIcon,
 } from "./assets/icons/index.js"
-import TasksSeparator from "./TaskSeparator"
-import { useState } from "react"
-import TASKS from "../constants/tasks"
+import Button from "./Button"
 import TaskItem from "./TaskItem"
-import { toast } from "sonner"
+import TasksSeparator from "./TaskSeparator"
 
 const Tasks = () => {
   const [tasks, setTasks] = useState(TASKS)
