@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import SidebarButton from "./SidebarButton"
-import HomeIcon from "../assets/icons/home.min.svg?react"
-import TaskIcon from "../assets/icons/tasks.min.svg?react"
+import { HomeIcon, TaskIcon } from "./assets/icons/index.js"
 
 const Sidebar = () => {
   return (
