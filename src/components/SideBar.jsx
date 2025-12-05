@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
-import SidebarButton from "./SidebarButton"
-import { HomeIcon, TaskIcon } from "./assets/icons/index.js"
+import { HomeIcon, TasksIcon } from "../assets/icons/index.js"
+import SidebarButton from "./SidebarButton.jsx"
 
 const Sidebar = () => {
   return (
@@ -21,7 +21,7 @@ const Sidebar = () => {
         </SidebarButton>
 
         <SidebarButton variant="selected">
-          <TaskIcon />
+          <TasksIcon />
           Minhas Tarefas
         </SidebarButton>
       </div>

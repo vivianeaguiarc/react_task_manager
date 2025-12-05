@@ -2,20 +2,22 @@
 import { useState } from "react"
 import { toast } from "sonner"
 
-import TASKS from "../constants/tasks"
 import {
   AddIcon,
   CloudSunIcon,
   MoonIcon,
   SunIcon,
   TrashIcon,
-} from "./assets/icons/index.js"
-import Button from "./Button"
-import TaskItem from "./TaskItem"
-import TasksSeparator from "./TaskSeparator"
+} from "../assets/icons/index.js"
+import TASKS from "../constants/tasks.js"
+import AddTaskDialog from "./AddTaskDialog.jsx"
+import Button from "./Button.jsx"
+import TaskItem from "./TaskItem.jsx"
+import TasksSeparator from "./TaskSeparator.jsx"
 
 const Tasks = () => {
   const [tasks, setTasks] = useState(TASKS)
+  const [addTaskDialogIsOpen, setAddTaskDialogIsOpen] = useState(false)
 
   const morningTasks = tasks.filter((task) => task.time === "morning")
   const afternoonTasks = tasks.filter((task) => task.time === "afternoon")
@@ -64,10 +66,11 @@ const Tasks = () => {
             Limpar tarefas
             <TrashIcon />
           </Button>
-          <Button>
+          <Button onClick={() => setAddTaskDialogIsOpen(true)}>
             <AddIcon />
             Nova tarefa
           </Button>
+          <AddTaskDialog isOpen={addTaskDialogIsOpen} />
         </div>
       </div>
 
