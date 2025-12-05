@@ -1,0 +1,26 @@
+
+/* ================================
+   ANIMAÇÃO DO ADD TASK DIALOG
+   ================================ */
+
+/* Estado inicial ao abrir (antes de entrar) */
+.add-task-dialog-enter {
+  opacity: 0;
+}
+
+/* Estado ativo enquanto entra */
+.add-task-dialog-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease;
+}
+
+/* Estado inicial ao começar a sair */
+.add-task-dialog-exit {
+  opacity: 1;
+}
+
+/* Estado ativo enquanto sai */
+.add-task-dialog-exit-active {
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
