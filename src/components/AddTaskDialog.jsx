@@ -12,9 +12,9 @@ import Input from "./Input"
 import TimeSelect from "./TimeSelect"
 
 const AddTaskDialog = ({ isOpen, handleDialogClose, handleSubmit }) => {
-  const [title, setTitle] = useState()
+  const [title, setTitle] = useState("")
   const [time, setTime] = useState("morning")
-  const [description, setDescription] = useState()
+  const [description, setDescription] = useState("")
   const [errors, setErrors] = useState([])
 
   const nodeRef = useRef()
@@ -24,6 +24,7 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, handleSubmit }) => {
       setTitle("")
       setTime("morning")
       setDescription("")
+      setErrors([])
     }
   }, [isOpen])
 
@@ -42,9 +43,9 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, handleSubmit }) => {
       })
     }
 
-    console.log({ newErrors })
+    setErrors(newErrors)
+
     if (newErrors.length > 0) {
-      setErrors(newErrors)
       return
     }
 
