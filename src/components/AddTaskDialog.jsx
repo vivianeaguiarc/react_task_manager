@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import "./AddTaskDialog.css"
 
+import { useState } from "react"
 import { useRef } from "react"
 import { createPortal } from "react-dom"
 import { CSSTransition } from "react-transition-group"
@@ -9,7 +10,11 @@ import Button from "./Button"
 import Input from "./Input"
 import TimeSelect from "./TimeSelect"
 
-const AddTaskDialog = ({ isOpen, handleDialogClose }) => {
+const AddTaskDialog = ({ isOpen, handleDialogClose, handleSubmit }) => {
+  const [title, setTitle] = useState()
+  const [time, setTime] = useState()
+  const [description, setDescription] = useState()
+
   const nodeRef = useRef()
 
   return (
@@ -34,12 +39,23 @@ const AddTaskDialog = ({ isOpen, handleDialogClose }) => {
                 Insira as informações abaixo
               </p>
               <div className="flex w-[336px] flex-col space-y-4">
-                <Input id="title" label="Título" placeholder="Título" />
-                <TimeSelect />
+                <Input
+                  id="title"
+                  label="Título"
+                  placeholder="Título"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+                <TimeSelect
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                />
                 <Input
                   id="description"
                   label="Descrição"
                   placeholder="Descreva a tarefa"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
                 <div className="flex gap-3">
                   <Button
@@ -50,7 +66,19 @@ const AddTaskDialog = ({ isOpen, handleDialogClose }) => {
                   >
                     Cancelar
                   </Button>
-                  <Button size="large" className="w-full">
+                  <Button
+                    size="large"
+                    className="w-full"
+                    onClick={() =>
+                      handleSubmit({
+                        id: Math.random(),
+                        title,
+                        time,
+                        description,
+                        status: "not_started",
+                      })
+                    }
+                  >
                     Salvar
                   </Button>
                 </div>
