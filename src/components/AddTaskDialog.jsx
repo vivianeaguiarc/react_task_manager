@@ -5,6 +5,7 @@ import { useState } from "react"
 import { useRef } from "react"
 import { createPortal } from "react-dom"
 import { CSSTransition } from "react-transition-group"
+import { v4 } from "uuid"
 
 import Button from "./Button"
 import Input from "./Input"
@@ -16,6 +17,17 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, handleSubmit }) => {
   const [description, setDescription] = useState()
 
   const nodeRef = useRef()
+
+  const handleSaveClick = () => {
+    handleSubmit({
+      id: v4(),
+      title,
+      time,
+      description,
+      status: "not_started",
+    })
+    handleDialogClose()
+  }
 
   return (
     <CSSTransition
@@ -69,15 +81,7 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, handleSubmit }) => {
                   <Button
                     size="large"
                     className="w-full"
-                    onClick={() =>
-                      handleSubmit({
-                        id: Math.random(),
-                        title,
-                        time,
-                        description,
-                        status: "not_started",
-                      })
-                    }
+                    onClick={handleSaveClick}
                   >
                     Salvar
                   </Button>
