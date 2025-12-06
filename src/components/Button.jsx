@@ -1,36 +1,34 @@
+import { tv } from "tailwind-variants"
+
 /* eslint-disable no-unused-vars */
 const Button = ({
   children,
-  variant = "primary",
+  color = "primary",
   size = "small",
   className,
   ...rest
 }) => {
-  const getVariantClasses = () => {
-    switch (variant) {
-      case "primary":
-        return "bg-brand-primary text-white"
+  const button = tv({
+    base: "flex items-center justify-center gap-2 rounded-md px-3 font-semibold transition hover:opacity-80",
+    variants: {
+      color: {
+        primary: "bg-brand-primary text-white",
+        ghost: "bg-transparent text-brand-dark-gray",
+        secondary: "bg-brand-light-gray text-brand-dark-blue",
+      },
+      size: {
+        small: "py-1 text-xs",
+        large: "py-2 text-sm",
+      },
+    },
+    defaultVariants: {
+      color: "primary",
+      size: "small",
+    },
+  })
 
-      case "ghost":
-        return "bg-transparent text-brand-dark-gray"
-
-      case "secondary":
-        return "bg-brand-light-gray text-brand-dark-blue"
-    }
-  }
-  const getSizeClasses = () => {
-    if (size === "small") {
-      return "py-1 text-xs"
-    }
-    if (size === "large") {
-      return "py-2 text-md"
-    }
-  }
   return (
-    <button
-      className={`flex items-center justify-center gap-2 rounded-md px-3 ${getSizeClasses()} font-semibold transition hover:opacity-80 ${getVariantClasses()} ${className}`}
-      {...rest}
-    >
+    <button className={button({ color, size, className })} {...rest}>
       {children}
     </button>
   )
