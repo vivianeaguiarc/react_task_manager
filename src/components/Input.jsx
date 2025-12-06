@@ -23,5 +23,7 @@ Input.displayName = "Input"
 Input.propTypes = {
   label: PropTypes.string.isRequired,
   errorMessage: PropTypes.string,
+  id: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
 }
 export default Input
