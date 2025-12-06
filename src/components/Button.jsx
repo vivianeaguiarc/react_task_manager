@@ -9,13 +9,13 @@ const Button = ({
   const getVariantClasses = () => {
     switch (variant) {
       case "primary":
-        return "bg-[#00ADB5] text-white"
+        return "bg-brand-primary text-white"
 
       case "ghost":
-        return "bg-transparent text-[#818181]"
+        return "bg-transparent text-brand-dark-gray"
 
       case "secondary":
-        return "bg-[#eeeeee] text-[#35383e]"
+        return "bg-brand-light-gray text-brand-dark-blue"
     }
   }
   const getSizeClasses = () => {
