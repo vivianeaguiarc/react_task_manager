@@ -1,0 +1,40 @@
+{
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Estudar",
+        "description": "Prova INSS",
+        "time": "morning",
+        "status": "done"
+      },
+      {
+        "id": 2,
+        "title": "Ler",
+        "description": "Ler arquitetura limpa",
+        "time": "afternoon",
+        "status": "in_progress"
+      },
+      {
+        "id": 3,
+        "title": "Treinar",
+        "description": "treino na academia",
+        "time": "evening",
+        "status": "in_progress"
+      },
+      {
+        "id": 4,
+        "title": "Fazer compras",
+        "description": "Fazer comporas no supermercado",
+        "time": "evening",
+        "status": "not_started"
+      },
+      {
+        "id": 5,
+        "title": "Meditar",
+        "description": "Na biblia",
+        "time": "morning",
+        "status": "not_started"
+      }
+    ]
+
+}

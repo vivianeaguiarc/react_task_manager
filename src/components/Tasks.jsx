@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
 import {
@@ -9,15 +9,26 @@ import {
   SunIcon,
   TrashIcon,
 } from "../assets/icons/index.js"
-import TASKS from "../constants/tasks.js"
 import AddTaskDialog from "./AddTaskDialog.jsx"
 import Button from "./Button.jsx"
 import TaskItem from "./TaskItem.jsx"
 import TasksSeparator from "./TaskSeparator.jsx"
 
 const Tasks = () => {
-  const [tasks, setTasks] = useState(TASKS)
+  const [tasks, setTasks] = useState([])
   const [addTaskDialogIsOpen, setAddTaskDialogIsOpen] = useState(false)
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const response = await fetch("https://localhost:3000/tasks", {
+        method: "GET",
+      })
+      const tasks = await response.json()
+      console.log(tasks)
+      setTasks(tasks)
+    }
+    fetchTasks()
+  }, [])
 
   const morningTasks = tasks.filter((task) => task.time === "morning")
   const afternoonTasks = tasks.filter((task) => task.time === "afternoon")
