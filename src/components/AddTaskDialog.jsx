@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import "./AddTaskDialog.css"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useRef } from "react"
 import { createPortal } from "react-dom"
 import { CSSTransition } from "react-transition-group"
@@ -12,23 +12,18 @@ import Input from "./Input"
 import TimeSelect from "./TimeSelect"
 
 const AddTaskDialog = ({ isOpen, handleDialogClose, handleSubmit }) => {
-  const [title, setTitle] = useState("")
-  const [time, setTime] = useState("morning")
-  const [description, setDescription] = useState("")
   const [errors, setErrors] = useState([])
 
   const nodeRef = useRef()
-
-  useEffect(() => {
-    if (!isOpen) {
-      setTitle("")
-      setTime("morning")
-      setDescription("")
-      setErrors([])
-    }
-  }, [isOpen])
+  const titleRef = useRef()
+  const descriptionRef = useRef()
+  const timeRef = useRef()
 
   const handleSaveClick = () => {
+    const title = titleRef.current.value
+    const description = descriptionRef.current.value
+    const time = timeRef.current.value
+
     const newErrors = []
     if (!title.trim()) {
       newErrors.push({ inputName: "title", message: "Título é obrigatório" })
@@ -89,22 +84,16 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, handleSubmit }) => {
                   id="title"
                   label="Título"
                   placeholder="Título"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
                   errorMessage={titleError?.message}
+                  ref={titleRef}
                 />
-                <TimeSelect
-                  value={time}
-                  onChange={(e) => setTime(e.target.value)}
-                  errorMessage={timeError?.message}
-                />
+                <TimeSelect errorMessage={timeError?.message} ref={timeRef} />
                 <Input
                   id="description"
                   label="Descrição"
                   placeholder="Descreva a tarefa"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
                   errorMessage={descriptionError?.message}
+                  ref={descriptionRef}
                 />
 
                 <div className="flex gap-3">
