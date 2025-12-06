@@ -1,3 +1,4 @@
+import PropTypes from "prop-types"
 import { tv } from "tailwind-variants"
 
 /* eslint-disable no-unused-vars */
@@ -32,6 +33,12 @@ const Button = ({
       {children}
     </button>
   )
+}
+Button.propTypes = {
+  children: PropTypes.node.isRequired,
+  color: PropTypes.oneOf(["primary", "secondary", "ghost"]),
+  size: PropTypes.oneOf(["small", "large"]),
+  className: PropTypes.string,
 }
 
 export default Button
