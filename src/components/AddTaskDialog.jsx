@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import "./AddTaskDialog.css"
 
+import PropTypes from "prop-types"
 import { useState } from "react"
 import { useRef } from "react"
 import { createPortal } from "react-dom"
@@ -121,6 +122,12 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, handleSubmit }) => {
       </div>
     </CSSTransition>
   )
+}
+
+AddTaskDialog.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  handleDialogClose: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
 }
 
 export default AddTaskDialog
