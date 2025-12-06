@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { forwardRef } from "react"
 
+import InputErrorMessage from "./InputErrorMessage"
 import InputLabel from "./InputLabel"
 
 const Input = forwardRef(({ label, errorMessage, ...rest }, ref) => {
@@ -13,9 +14,7 @@ const Input = forwardRef(({ label, errorMessage, ...rest }, ref) => {
         ref={ref}
         {...rest}
       />
-      {errorMessage && (
-        <span className="text-left text-xs text-red-500">{errorMessage}</span>
-      )}
+      {errorMessage && <InputErrorMessage>{errorMessage}</InputErrorMessage>}
     </div>
   )
 })
