@@ -20,7 +20,7 @@ const Tasks = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const response = await fetch("https://localhost:3000/tasks", {
+      const response = await fetch("http://localhost:3000/tasks", {
         method: "GET",
       })
       const tasks = await response.json()
@@ -37,7 +37,14 @@ const Tasks = () => {
     setAddTaskDialogIsOpen(false)
   }
 
-  const handleDeleteClick = (taskId) => {
+  const handleDeleteClick = async (taskId) => {
+    const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+      method: "DELETE",
+    })
+
+    if (!response.ok) {
+      return toast.error("Erro ao deletar tarefa. Tente novamente.")
+    }
     const newTasks = tasks.filter((task) => task.id !== taskId)
     setTasks(newTasks)
     toast.success("Tarefa deletada com sucesso!")

@@ -41,13 +41,6 @@
       "time": "morning",
       "description": "teste",
       "status": "not_started"
-    },
-    {
-      "id": "715f4f75-84c7-40f2-a055-b7ff0703dd11",
-      "title": "estudar",
-      "time": "morning",
-      "description": "java",
-      "status": "not_started"
     }
   ]
 }
