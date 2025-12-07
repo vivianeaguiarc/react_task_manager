@@ -28,21 +28,17 @@ const Tasks = () => {
     }
     fetchTasks()
   }, [])
-
   const morningTasks = tasks.filter((task) => task.time === "morning")
   const afternoonTasks = tasks.filter((task) => task.time === "afternoon")
   const nightTasks = tasks.filter((task) => task.time === "evening")
-
   const handleDialogClose = () => {
     setAddTaskDialogIsOpen(false)
   }
-
   const onDeleteTaskSuccess = async (taskId) => {
     const newTasks = tasks.filter((task) => task.id !== taskId)
     setTasks(newTasks)
     toast.success("Tarefa deletada com sucesso!")
   }
-
   const handleTaskCheckBoxChange = (taskId) => {
     const newTasks = tasks.map((task) => {
       if (task.id !== taskId) {
@@ -70,6 +66,9 @@ const Tasks = () => {
     setTasks([...tasks, task])
     toast.success("Tarefa adicionada com sucesso!")
   }
+  const onTaskSubmitError = () => {
+    toast.error("Erro ao criar tarefa. Tente novamente.")
+  }
 
   return (
     <div className="w-full space-y-6 px-8 py-16">
@@ -93,13 +92,11 @@ const Tasks = () => {
             isOpen={addTaskDialogIsOpen}
             handleDialogClose={handleDialogClose}
             onSubmitSuccess={onTaskSubmitSuccess}
+            onSubmitError={onTaskSubmitError}
           />
         </div>
       </div>
-
-      {/* LISTA */}
       <div className="mb-3 rounded-xl bg-white p-6">
-        {/* MANHÃ */}
         <div className="my-6 space-y-3">
           <TasksSeparator title="Manhã" icon={<SunIcon />} />
           {morningTasks.map((task) => (
@@ -108,11 +105,10 @@ const Tasks = () => {
               task={task}
               handleCheckBoxChange={handleTaskCheckBoxChange}
               onDeleteSucess={onDeleteTaskSuccess}
+              onDeleteError={(message) => toast.error(message)}
             />
           ))}
         </div>
-
-        {/* TARDE */}
         <div className="my-6 space-y-3">
           <TasksSeparator title="Tarde" icon={<CloudSunIcon />} />
           {afternoonTasks.map((task) => (
@@ -124,8 +120,6 @@ const Tasks = () => {
             />
           ))}
         </div>
-
-        {/* NOITE */}
         <div className="space-y-3">
           <TasksSeparator title="Noite" icon={<MoonIcon />} />
           {nightTasks.map((task) => (

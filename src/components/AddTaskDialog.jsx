@@ -7,16 +7,21 @@ import { useRef } from "react"
 import { createPortal } from "react-dom"
 import { CSSTransition } from "react-transition-group"
 import { toast } from "sonner"
+import { v4 as uuidv4 } from "uuid"
 
 import { LoaderIcon } from "../assets/icons"
 import Button from "./Button"
 import Input from "./Input"
 import TimeSelect from "./TimeSelect"
 
-const AddTaskDialog = ({ isOpen, handleDialogClose, onSubmitSuccess }) => {
+const AddTaskDialog = ({
+  isOpen,
+  handleDialogClose,
+  onSubmitSuccess,
+  onSubmitError,
+}) => {
   const [errors, setErrors] = useState([])
   const [isLoading, setIsLoading] = useState(false)
-
   const nodeRef = useRef()
   const titleRef = useRef()
   const descriptionRef = useRef()
@@ -24,14 +29,10 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, onSubmitSuccess }) => {
 
   const handleSaveClick = async () => {
     setIsLoading(true) // inicia animação
-
-    // segura animação por 2s antes de validar e salvar
     await new Promise((resolve) => setTimeout(resolve, 2000))
-
     const title = titleRef.current.value
     const description = descriptionRef.current.value
     const time = timeRef.current.value
-
     const newErrors = []
     if (!title.trim()) {
       newErrors.push({ inputName: "title", message: "Título é obrigatório" })
@@ -45,16 +46,19 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, onSubmitSuccess }) => {
         message: "Descrição é obrigatória",
       })
     }
-
     setErrors(newErrors)
-
     if (newErrors.length > 0) {
       setIsLoading(false) // encerra animação se tiver erro
       return
     }
 
-    const task = { title, time, description, status: "not_started" }
-
+    const task = {
+      id: uuidv4(),
+      title,
+      time,
+      description,
+      status: "not_started",
+    }
     const response = await fetch("http://127.0.0.1:3000/tasks", {
       method: "POST",
       headers: {
@@ -62,20 +66,15 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, onSubmitSuccess }) => {
       },
       body: JSON.stringify(task),
     })
-
     if (!response.ok) {
       setIsLoading(false)
-      return toast.error("Erro ao criar tarefa. Tente novamente.")
+      return onSubmitError()
     }
-
-    // ⬅️ AQUI É A CORREÇÃO FUNDAMENTAL
     const createdTask = await response.json()
     onSubmitSuccess(createdTask)
-
     setIsLoading(false)
     handleDialogClose()
   }
-
   const titleError = errors.find((error) => error.inputName === "title")
   const timeError = errors.find((error) => error.inputName === "time")
   const descriptionError = errors.find(
@@ -118,7 +117,6 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, onSubmitSuccess }) => {
                   errorMessage={descriptionError?.message}
                   ref={descriptionRef}
                 />
-
                 <div className="flex gap-3">
                   <Button
                     size="large"
@@ -150,7 +148,6 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, onSubmitSuccess }) => {
     </CSSTransition>
   )
 }
-
 AddTaskDialog.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   handleDialogClose: PropTypes.func.isRequired,

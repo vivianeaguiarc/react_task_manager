@@ -13,25 +13,20 @@ import Button from "./Button.jsx"
 
 const TaskItem = ({ task, handleCheckBoxChange, onDeleteSucess }) => {
   const [deleteIsLoading, setDeleteIsLoading] = useState(false)
-
   const handleDeleteClick = async () => {
     setDeleteIsLoading(true)
-
     const response = await fetch(`http://127.0.0.1:3000/tasks/${task.id}`, {
       method: "DELETE",
     })
-
     if (!response.ok) {
       setDeleteIsLoading(false)
       return toast.error("Erro ao deletar tarefa. Tente novamente.")
     }
-
     setTimeout(() => {
       onDeleteSucess(task.id)
       setDeleteIsLoading(false)
     }, 1000)
   }
-
   const getStatusClasses = () => {
     if (task.status === "done") return "bg-brand-primary/10 text-brand-primary"
     if (task.status === "in_progress")
@@ -68,7 +63,6 @@ const TaskItem = ({ task, handleCheckBoxChange, onDeleteSucess }) => {
 
         {task.title}
       </div>
-
       <div className="flex items-center gap-2">
         <Button color="ghost" onClick={handleDeleteClick}>
           {deleteIsLoading ? (
