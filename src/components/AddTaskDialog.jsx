@@ -6,13 +6,14 @@ import { useState } from "react"
 import { useRef } from "react"
 import { createPortal } from "react-dom"
 import { CSSTransition } from "react-transition-group"
+import { toast } from "sonner"
 import { v4 } from "uuid"
 
 import Button from "./Button"
 import Input from "./Input"
 import TimeSelect from "./TimeSelect"
 
-const AddTaskDialog = ({ isOpen, handleDialogClose, handleSubmit }) => {
+const AddTaskDialog = ({ isOpen, handleDialogClose, onSubmitSuccess }) => {
   const [errors, setErrors] = useState([])
 
   const nodeRef = useRef()
@@ -20,7 +21,7 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, handleSubmit }) => {
   const descriptionRef = useRef()
   const timeRef = useRef()
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     const title = titleRef.current.value
     const description = descriptionRef.current.value
     const time = timeRef.current.value
@@ -44,16 +45,24 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, handleSubmit }) => {
     if (newErrors.length > 0) {
       return
     }
-
-    handleSubmit({
-      id: v4(),
-      title,
-      time,
-      description,
-      status: "not_started",
+    const task = { title, time, description, status: "not_started" }
+    const response = await fetch("http://127.0.0.1:3000/tasks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(task),
     })
+
+    if (!response.ok) {
+      return toast.error("Erro ao criar tarefa. Tente novamente.")
+    }
+    onSubmitSuccess(task)
+    // erro ao clicar no botao de salvar (verificar se a tarefa foi realmente criada)
+
     handleDialogClose()
   }
+
   const titleError = errors.find((error) => error.inputName === "title")
   const timeError = errors.find((error) => error.inputName === "time")
   const descriptionError = errors.find(
@@ -127,7 +136,7 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, handleSubmit }) => {
 AddTaskDialog.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   handleDialogClose: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
+  onSubmitSuccess: PropTypes.func.isRequired,
 }
 
 export default AddTaskDialog

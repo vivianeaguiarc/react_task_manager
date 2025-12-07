@@ -11,17 +11,13 @@ import {
 } from "../assets/icons/index.js"
 import Button from "./Button.jsx"
 
-const TaskItem = ({
-  task,
-  handleCheckBoxChange,
-  onDeleteSucess, // mantém exatamente como no seu código
-}) => {
-  const [deleteIsLoading, setDeleteIsLoading] = useState(false) // apenas corrigido nome
+const TaskItem = ({ task, handleCheckBoxChange, onDeleteSucess }) => {
+  const [deleteIsLoading, setDeleteIsLoading] = useState(false)
 
   const handleDeleteClick = async () => {
     setDeleteIsLoading(true)
 
-    const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
+    const response = await fetch(`http://127.0.0.1:3000/tasks/${task.id}`, {
       method: "DELETE",
     })
 
@@ -30,7 +26,6 @@ const TaskItem = ({
       return toast.error("Erro ao deletar tarefa. Tente novamente.")
     }
 
-    // 🔥 AGUARDA 2s MOSTRANDO O LOADER ANTES DE REMOVER
     setTimeout(() => {
       onDeleteSucess(task.id)
       setDeleteIsLoading(false)
@@ -48,7 +43,11 @@ const TaskItem = ({
 
   return (
     <div
-      className={`flex items-center justify-between gap-2 rounded-lg px-4 py-3 text-sm transition ${getStatusClasses()} ${deleteIsLoading ? "bg-brand-process/20 text-brand-process opacity-70" : ""}`}
+      className={`flex items-center justify-between gap-2 rounded-lg px-4 py-3 text-sm transition ${getStatusClasses()} ${
+        deleteIsLoading
+          ? "bg-brand-process/20 text-brand-process opacity-70"
+          : ""
+      }`}
     >
       <div className="flex items-center gap-2">
         <label

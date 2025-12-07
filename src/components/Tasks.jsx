@@ -20,7 +20,7 @@ const Tasks = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const response = await fetch("http://localhost:3000/tasks", {
+      const response = await fetch("http://127.0.0.1:3000/tasks", {
         method: "GET",
       })
       const tasks = await response.json()
@@ -66,20 +66,11 @@ const Tasks = () => {
 
     setTasks(newTasks)
   }
-  const handleAddTaskSubmit = async (task) => {
-    const response = await fetch("http://localhost:3000/tasks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(task),
-    })
-    if (!response.ok) {
-      return toast.error("Erro ao adicionar tarefa. Tente novamente.")
-    }
+  const onTaskSubmitSuccess = (task) => {
     setTasks([...tasks, task])
     toast.success("Tarefa adicionada com sucesso!")
   }
+
   return (
     <div className="w-full space-y-6 px-8 py-16">
       <div className="flex w-full justify-between">
@@ -101,7 +92,7 @@ const Tasks = () => {
           <AddTaskDialog
             isOpen={addTaskDialogIsOpen}
             handleDialogClose={handleDialogClose}
-            handleSubmit={handleAddTaskSubmit}
+            handleSubmit={onTaskSubmitSuccess}
           />
         </div>
       </div>
