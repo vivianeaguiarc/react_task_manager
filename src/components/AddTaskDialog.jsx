@@ -7,7 +7,6 @@ import { useRef } from "react"
 import { createPortal } from "react-dom"
 import { CSSTransition } from "react-transition-group"
 import { toast } from "sonner"
-import { v4 } from "uuid"
 
 import Button from "./Button"
 import Input from "./Input"
@@ -15,6 +14,7 @@ import TimeSelect from "./TimeSelect"
 
 const AddTaskDialog = ({ isOpen, handleDialogClose, onSubmitSuccess }) => {
   const [errors, setErrors] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   const nodeRef = useRef()
   const titleRef = useRef()
@@ -46,6 +46,7 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, onSubmitSuccess }) => {
       return
     }
     const task = { title, time, description, status: "not_started" }
+    setIsLoading(true)
     const response = await fetch("http://127.0.0.1:3000/tasks", {
       method: "POST",
       headers: {
@@ -55,10 +56,11 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, onSubmitSuccess }) => {
     })
 
     if (!response.ok) {
+      setIsLoading(false)
       return toast.error("Erro ao criar tarefa. Tente novamente.")
     }
     onSubmitSuccess(task)
-    // erro ao clicar no botao de salvar (verificar se a tarefa foi realmente criada)
+    setIsLoading(false)
 
     handleDialogClose()
   }
