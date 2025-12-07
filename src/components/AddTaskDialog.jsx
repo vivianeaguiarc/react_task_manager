@@ -8,6 +8,7 @@ import { createPortal } from "react-dom"
 import { CSSTransition } from "react-transition-group"
 import { toast } from "sonner"
 
+import { LoaderIcon } from "../assets/icons"
 import Button from "./Button"
 import Input from "./Input"
 import TimeSelect from "./TimeSelect"
@@ -22,6 +23,11 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, onSubmitSuccess }) => {
   const timeRef = useRef()
 
   const handleSaveClick = async () => {
+    setIsLoading(true) // inicia animação
+
+    // segura animação por 2s antes de validar e salvar
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+
     const title = titleRef.current.value
     const description = descriptionRef.current.value
     const time = timeRef.current.value
@@ -43,10 +49,12 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, onSubmitSuccess }) => {
     setErrors(newErrors)
 
     if (newErrors.length > 0) {
+      setIsLoading(false) // encerra animação se tiver erro
       return
     }
+
     const task = { title, time, description, status: "not_started" }
-    setIsLoading(true)
+
     const response = await fetch("http://127.0.0.1:3000/tasks", {
       method: "POST",
       headers: {
@@ -59,9 +67,12 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, onSubmitSuccess }) => {
       setIsLoading(false)
       return toast.error("Erro ao criar tarefa. Tente novamente.")
     }
-    onSubmitSuccess(task)
-    setIsLoading(false)
 
+    // ⬅️ AQUI É A CORREÇÃO FUNDAMENTAL
+    const createdTask = await response.json()
+    onSubmitSuccess(createdTask)
+
+    setIsLoading(false)
     handleDialogClose()
   }
 
@@ -119,10 +130,15 @@ const AddTaskDialog = ({ isOpen, handleDialogClose, onSubmitSuccess }) => {
                   </Button>
                   <Button
                     size="large"
-                    className="w-full"
+                    className="flex w-full items-center justify-center"
                     onClick={handleSaveClick}
+                    disabled={isLoading}
                   >
-                    Salvar
+                    {isLoading ? (
+                      <LoaderIcon className="tet-brand-process animate-spin" />
+                    ) : (
+                      "Salvar"
+                    )}
                   </Button>
                 </div>
               </div>
