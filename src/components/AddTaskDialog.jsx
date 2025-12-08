@@ -28,53 +28,60 @@ const AddTaskDialog = ({
   const timeRef = useRef()
 
   const handleSaveClick = async () => {
-    setIsLoading(true) // inicia animação
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    const title = titleRef.current.value
-    const description = descriptionRef.current.value
-    const time = timeRef.current.value
-    const newErrors = []
-    if (!title.trim()) {
-      newErrors.push({ inputName: "title", message: "Título é obrigatório" })
-    }
-    if (!time.trim()) {
-      newErrors.push({ inputName: "time", message: "Período é obrigatório" })
-    }
-    if (!description.trim()) {
-      newErrors.push({
-        inputName: "description",
-        message: "Descrição é obrigatória",
-      })
-    }
-    setErrors(newErrors)
-    if (newErrors.length > 0) {
-      setIsLoading(false) // encerra animação se tiver erro
-      return
-    }
+    setIsLoading(true)
 
-    const task = {
-      id: uuidv4(),
-      title,
-      time,
-      description,
-      status: "not_started",
-    }
-    const response = await fetch("http://127.0.0.1:3000/tasks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(task),
-    })
-    if (!response.ok) {
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+
+      const title = titleRef.current.value
+      const description = descriptionRef.current.value
+      const time = timeRef.current.value
+
+      const newErrors = []
+      if (!title.trim())
+        newErrors.push({ inputName: "title", message: "Título é obrigatório" })
+      if (!time.trim())
+        newErrors.push({ inputName: "time", message: "Período é obrigatório" })
+      if (!description.trim())
+        newErrors.push({
+          inputName: "description",
+          message: "Descrição é obrigatória",
+        })
+
+      setErrors(newErrors)
+
+      if (newErrors.length > 0) return
+
+      const task = {
+        id: uuidv4(),
+        title,
+        time,
+        description,
+        status: "not_started",
+      }
+
+      const response = await fetch("http://127.0.0.1:3000/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(task),
+      })
+      if (!response.ok) {
+        toast.error("Erro ao salvar a tarefa.")
+        return
+      }
+
+      const createdTask = await response.json()
+      onSubmitSuccess(createdTask)
+      handleDialogClose()
+    } catch (error) {
+      toast.error("Falha ao conectar ao servidor. Verifique o JSON Server.")
+    } finally {
       setIsLoading(false)
-      return onSubmitError()
     }
-    const createdTask = await response.json()
-    onSubmitSuccess(createdTask)
-    setIsLoading(false)
-    handleDialogClose()
   }
+
   const titleError = errors.find((error) => error.inputName === "title")
   const timeError = errors.find((error) => error.inputName === "time")
   const descriptionError = errors.find(
