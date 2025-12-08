@@ -36,6 +36,7 @@
     "eslint-plugin-simple-import-sort": "^12.1.0",
     "git-commit-msg-linter": "^5.0.8",
     "husky": "^9.0.11",
+    "json-server": "^1.0.0-beta.3",
     "lint-staged": "^15.2.7",
     "postcss": "^8.4.38",
     "prettier": "^3.3.2",
