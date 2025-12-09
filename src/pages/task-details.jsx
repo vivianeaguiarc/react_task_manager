@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { toast } from "sonner"
 
@@ -18,77 +19,47 @@ import TimeSelect from "../components/TimeSelect.jsx"
 const TaskDetailsPage = () => {
   const { taskId } = useParams()
   const [task, setTask] = useState(null)
-  const [saveIsLoading, setSaveIsLoading] = useState(false)
-  const [errors, setErrors] = useState([])
-
   const navigate = useNavigate()
 
-  const titleRef = useRef()
-  const descriptionRef = useRef()
-  const timeRef = useRef()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm()
 
   const handleBackClick = () => navigate(-1)
 
-  // Buscar tarefa
+  // Buscar tarefa e preencher formulário
   useEffect(() => {
     const fetchTask = async () => {
       const response = await fetch(`http://127.0.0.1:3000/tasks/${taskId}`)
       const data = await response.json()
       setTask(data)
+      reset(data) // preenche campos do form
     }
 
     fetchTask()
-  }, [taskId])
+  }, [taskId, reset])
 
-  // Salvar alterações
-  const handleSaveClick = async () => {
-    setSaveIsLoading(true)
-
+  const handleSaveClick = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1200)) // animação suave
-
-      const title = titleRef.current.value
-      const description = descriptionRef.current.value
-      const time = timeRef.current.value
-
-      const validationErrors = []
-      if (!title.trim())
-        validationErrors.push({
-          inputName: "title",
-          message: "Título é obrigatório",
-        })
-      if (!time.trim())
-        validationErrors.push({
-          inputName: "time",
-          message: "Período é obrigatório",
-        })
-      if (!description.trim())
-        validationErrors.push({
-          inputName: "description",
-          message: "Descrição é obrigatória",
-        })
-
-      setErrors(validationErrors)
-      if (validationErrors.length > 0) return
-
-      const updatedTask = {
-        ...task,
-        title,
-        time,
-        description,
-      }
+      await new Promise((resolve) => setTimeout(resolve, 1200))
 
       const response = await fetch(`http://127.0.0.1:3000/tasks/${taskId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(updatedTask),
+        body: JSON.stringify({
+          title: data.title,
+          time: data.time,
+          description: data.description,
+        }),
       })
 
       if (!response.ok) {
-        toast.error("Erro ao salvar a tarefa.")
-        return
+        return toast.error("Erro ao salvar a tarefa.")
       }
 
       const newTask = await response.json()
@@ -96,26 +67,21 @@ const TaskDetailsPage = () => {
       toast.success("Tarefa atualizada!")
     } catch (error) {
       toast.error("Falha ao conectar ao servidor.")
-    } finally {
-      setSaveIsLoading(false)
     }
   }
+
   const handleDeleteClick = async () => {
     const response = await fetch(`http://127.0.0.1:3000/tasks/${taskId}`, {
       method: "DELETE",
     })
 
     if (!response.ok) {
-      toast.error("Erro ao remover a tarefa.")
-      return
+      return toast.error("Erro ao remover a tarefa.")
     }
 
     toast.success("Tarefa removida!")
     navigate("/")
   }
-  const titleError = errors.find((e) => e.inputName === "title")
-  const timeError = errors.find((e) => e.inputName === "time")
-  const descriptionError = errors.find((e) => e.inputName === "description")
 
   if (!task) return <div>Carregando...</div>
 
@@ -126,7 +92,6 @@ const TaskDetailsPage = () => {
       <div className="w-full flex-1 space-y-6 p-6 px-8 py-16">
         <div className="flex w-full justify-between">
           <div>
-            {/* Botão Voltar */}
             <button
               onClick={handleBackClick}
               className="mb-3 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-brand-primary"
@@ -134,19 +99,17 @@ const TaskDetailsPage = () => {
               <ArrowLeftIcon />
             </button>
 
-            {/* Breadcrumb */}
             <div className="flex items-center gap-1 text-xs">
               <Link to="/" className="cursor-pointer text-brand-text-gray">
                 Minhas tarefas
               </Link>
               <ChevronRightIcon className="text-brand-text-gray" />
               <span className="font-semibold text-brand-primary">
-                {task.title}
+                {task?.title}
               </span>
             </div>
 
-            {/* Título */}
-            <h1 className="mt-2 text-xl font-semibold">{task.title}</h1>
+            <h1 className="mt-2 text-xl font-semibold">{task?.title}</h1>
           </div>
 
           <Button
@@ -159,44 +122,53 @@ const TaskDetailsPage = () => {
           </Button>
         </div>
 
-        {/* Form */}
-        <div className="space-y-6 rounded-xl bg-brand-white p-6 shadow">
-          <Input
-            id="title"
-            label="Título"
-            defaultValue={task.title}
-            errorMessage={titleError?.message}
-            ref={titleRef}
-          />
+        {/* FORMULÁRIO */}
+        <form onSubmit={handleSubmit(handleSaveClick)}>
+          <div className="space-y-6 rounded-xl bg-brand-white p-6 shadow">
+            <Input
+              id="title"
+              label="Título"
+              defaultValue={task.title}
+              {...register("title", {
+                validate: (value) =>
+                  value.trim() !== "" || "O título é obrigatório.",
+              })}
+              errorMessage={errors.title?.message}
+            />
 
-          <TimeSelect
-            defaultValue={task.time}
-            errorMessage={timeError?.message}
-            ref={timeRef}
-          />
+            <TimeSelect
+              defaultValue={task.time}
+              {...register("time", {
+                validate: (value) => value !== "" || "O horário é obrigatório.",
+              })}
+              errorMessage={errors.time?.message}
+            />
 
-          <Input
-            id="description"
-            label="Descrição"
-            defaultValue={task.description}
-            errorMessage={descriptionError?.message}
-            ref={descriptionRef}
-          />
-        </div>
+            <Input
+              id="description"
+              label="Descrição"
+              defaultValue={task.description}
+              {...register("description", {
+                validate: (value) =>
+                  value.trim() !== "" || "A descrição é obrigatória.",
+              })}
+              errorMessage={errors.description?.message}
+            />
+          </div>
 
-        {/* Botões */}
-        <div className="flex w-full justify-end gap-2">
-          <Button
-            size="large"
-            color="primary"
-            onClick={handleSaveClick}
-            disabled={saveIsLoading}
-            className="flex items-center gap-2"
-          >
-            {saveIsLoading && <LoaderIcon className="h-5 w-5 animate-spin" />}
-            {saveIsLoading ? "Salvando..." : "Salvar"}
-          </Button>
-        </div>
+          <div className="flex w-full justify-end gap-3">
+            <Button
+              size="large"
+              color="primary"
+              type="submit"
+              disabled={isSubmitting}
+              className="flex items-center gap-2"
+            >
+              {isSubmitting && <LoaderIcon className="h-5 w-5 animate-spin" />}
+              {isSubmitting ? "Salvando..." : "Salvar"}
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   )

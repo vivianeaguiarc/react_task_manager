@@ -1,11 +1,3 @@
 {
-  "tasks": [
-    {
-      "id": "b20e2a44-bef5-4ae0-b5e0-4673146ea396",
-      "title": "estudar",
-      "time": "morning",
-      "description": "react",
-      "status": "not_started"
-    }
-  ]
+  "tasks": []
 }
