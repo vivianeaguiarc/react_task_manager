@@ -27,13 +27,6 @@
       "time": "morning",
       "description": "fullstack",
       "status": "not_started"
-    },
-    {
-      "id": "a8679559-d4a9-4360-87f3-9d0831c7898a",
-      "title": "teste",
-      "time": "morning",
-      "description": "teste",
-      "status": "not_started"
     }
   ]
 }
