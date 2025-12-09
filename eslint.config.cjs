@@ -1,32 +1,6 @@
-// import js from '@eslint/js'
-// import globals from 'globals'
-// import reactHooks from 'eslint-plugin-react-hooks'
-// import reactRefresh from 'eslint-plugin-react-refresh'
-// import { defineConfig, globalIgnores } from 'eslint/config'
-
-// export default defineConfig([
-//   globalIgnores(['dist']),
-//   {
-//     files: ['**/*.{js,jsx}'],
-//     extends: [
-//       js.configs.recommended,
-//       reactHooks.configs.flat.recommended,
-//       reactRefresh.configs.vite,
-//     ],
-//     languageOptions: {
-//       ecmaVersion: 2020,
-//       globals: globals.browser,
-//       parserOptions: {
-//         ecmaVersion: 'latest',
-//         ecmaFeatures: { jsx: true },
-//         sourceType: 'module',
-//       },
-//     },
-//     rules: {
-//       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
-//     },
-//   },
-// ])
+// -------------------------------------------------------
+// ESLint Flat Config + React + Prettier + Tailwind
+// -------------------------------------------------------
 
 const js = require("@eslint/js")
 const globals = require("globals")
@@ -35,26 +9,27 @@ const globals = require("globals")
 const reactPlugin = require("eslint-plugin-react")
 const reactHooks = require("eslint-plugin-react-hooks")
 const reactRefresh = require("eslint-plugin-react-refresh")
+const simpleImportSort = require("eslint-plugin-simple-import-sort")
+const prettierConfig = require("eslint-config-prettier")
 
 module.exports = [
-  // 1. Ignorar arquivos
+  // Ignorar arquivos e pastas
   {
-    ignores: ["dist", ".eslintrc.cjs", "node_modules"],
+    ignores: ["dist", "node_modules"],
   },
 
-  // 2. Configuração Base
   {
-    files: ["**/*.{js,jsx,mjs,cjs}"],
+    files: ["**/*.{js,jsx}"],
 
-    // A. Plugins (Flat Config)
+    // Plugins
     plugins: {
       react: reactPlugin,
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
-      "simple-import-sort": require("eslint-plugin-simple-import-sort"),
+      "simple-import-sort": simpleImportSort,
     },
 
-    // B. Opções de linguagem (AQUI que entra parserOptions!)
+    // Ambiente & linguagem
     languageOptions: {
       globals: globals.browser,
       parserOptions: {
@@ -64,34 +39,39 @@ module.exports = [
       },
     },
 
-    // C. Recomendações padrão do ESLint
+    // Regras recomendadas do JS
     ...js.configs.recommended,
 
-    // D. Settings
+    // Configurações React
     settings: {
       react: { version: "18.2" },
     },
 
-    // E. Regras
+    // Regras
     rules: {
-      // Regras React
+      // React
       "react/jsx-no-target-blank": "off",
 
-      // Hooks
+      // Hooks obrigatório
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
 
-      // Refresh
+      // React Refresh
       "react-refresh/only-export-components": [
         "warn",
         { allowConstantExport: true },
       ],
 
-      // Outras regras opcionais
-      "no-unused-vars": "warn",
-      "no-undef": "warn",
+      // Import Sort
       "simple-import-sort/imports": "warn",
       "simple-import-sort/exports": "warn",
+
+      // Clean code
+      "no-unused-vars": "warn",
+      "no-undef": "warn",
     },
   },
+
+  // 🔥 Adiciona Prettier por último para sobrescrever regras conflitantes
+  prettierConfig,
 ]
