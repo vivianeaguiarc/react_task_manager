@@ -32,7 +32,6 @@ const AddTaskDialog = ({
 
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000))
-
       const title = titleRef.current.value
       const description = descriptionRef.current.value
       const time = timeRef.current.value
