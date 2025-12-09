@@ -1,38 +1,10 @@
 {
   "tasks": [
     {
-      "id": "9d053cd9-f48e-406c-81ad-f2108ea1befe",
-      "title": "estudar",
-      "time": "morning",
-      "description": "java",
-      "status": "not_started"
-    },
-    {
-      "id": "5bc9e841-d1e0-4b98-82e4-778f92d2d128",
+      "id": "64185386-7052-4bf3-b948-d7db7882262b",
       "title": "Estagio",
       "time": "afternoon",
-      "description": "fullstack",
-      "status": "not_started"
-    },
-    {
-      "id": "09c46c79-d91b-4d51-95b9-9c66ac7e0647",
-      "title": "devocional ",
-      "time": "evening",
-      "description": "biblia",
-      "status": "not_started"
-    },
-    {
-      "id": "dd6c0989-95f9-4d5c-974d-74029af6ca14",
-      "title": "teste",
-      "time": "morning",
-      "description": "teste",
-      "status": "not_started"
-    },
-    {
-      "id": "74b174e4-73f8-4198-af1a-17ad16759dc9",
-      "title": "teste",
-      "time": "morning",
-      "description": "teste",
+      "description": "Fullstack",
       "status": "not_started"
     }
   ]
