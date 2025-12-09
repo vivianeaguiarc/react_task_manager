@@ -69,7 +69,14 @@ const AddTaskDialog = ({
       toast.error("Falha ao conectar ao servidor. Verifique o JSON Server.")
     }
   }
-
+  const handleCancelClick = () => {
+    handleDialogClose()
+    reset({
+      title: "",
+      time: "morning",
+      description: "",
+    })
+  }
   return (
     <CSSTransition
       nodeRef={nodeRef}
@@ -144,7 +151,7 @@ const AddTaskDialog = ({
                     className="w-full"
                     color="secondary"
                     type="button"
-                    onClick={handleDialogClose}
+                    onClick={handleCancelClick}
                   >
                     Cancelar
                   </Button>
