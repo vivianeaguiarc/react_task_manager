@@ -1,34 +1,21 @@
 /* eslint-disable no-unused-vars */
 import { useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
 import { toast } from 'sonner'
 
-import {
-  AddIcon,
-  CloudSunIcon,
-  MoonIcon,
-  SunIcon,
-  TrashIcon,
-} from '../assets/icons/index.js'
+import { CloudSunIcon, MoonIcon, SunIcon } from '../assets/icons/index.js'
 import { useGetTasks } from '../hooks/data/use-get-tasks.js'
-import AddTaskDialog from './AddTaskDialog.jsx'
-import Button from './Button.jsx'
+import { taskQueryKey } from '../keys/queries.js'
+import Header from './Header.jsx'
 import TaskItem from './TaskItem.jsx'
 import TasksSeparator from './TaskSeparator.jsx'
 
 const Tasks = () => {
   const queryClient = useQueryClient()
-
-  // 🔥 Fallback seguro evita crash
   const { data: tasks = [] } = useGetTasks()
-
-  const [addTaskDialogIsOpen, setAddTaskDialogIsOpen] = useState(false)
 
   const morningTasks = tasks.filter((t) => t.time === 'morning')
   const afternoonTasks = tasks.filter((t) => t.time === 'afternoon')
   const nightTasks = tasks.filter((t) => t.time === 'evening')
-
-  const handleDialogClose = () => setAddTaskDialogIsOpen(false)
 
   const onDeleteTaskSuccess = (taskId) => {
     queryClient.setQueryData(['tasks'], (old = []) =>
@@ -47,33 +34,15 @@ const Tasks = () => {
       return { ...task, status: 'not_started' }
     })
 
-    queryClient.setQueryData(['tasks'], updated)
+    queryClient.setQueryData(taskQueryKey.getAll(), updated)
   }
 
   return (
     <div className="w-full space-y-6 px-8 py-16">
-      <div className="flex w-full justify-between">
-        <span className="text-md font-semibold text-brand-primary">
-          Minhas Tarefas
-        </span>
-
-        <div className="flex items-center gap-3">
-          <Button color="ghost">
-            Limpar tarefas
-            <TrashIcon />
-          </Button>
-
-          <Button onClick={() => setAddTaskDialogIsOpen(true)}>
-            <AddIcon /> Nova tarefa
-          </Button>
-
-          <AddTaskDialog
-            isOpen={addTaskDialogIsOpen}
-            handleDialogClose={handleDialogClose}
-          />
-        </div>
-      </div>
-
+      <Header
+        subtitle={'Minhas tarefas'}
+        title={'Organize suas tarefas diárias'}
+      />
       <div className="mb-3 rounded-xl bg-white p-6">
         {/* MANHÃ */}
         <div className="my-6 space-y-3">
