@@ -8,31 +8,24 @@
       "status": "not_started"
     },
     {
-      "id": "4423cf97-a7fe-49e1-997c-8c0106bacf3c",
-      "title": "estudar",
-      "time": "morning",
-      "description": "react",
-      "status": "not_started"
-    },
-    {
-      "id": "c509c560-b33d-4e8e-ace9-ef0d85a91d83",
-      "title": "Estudar",
-      "time": "morning",
-      "description": "React",
-      "status": "not_started"
-    },
-    {
-      "id": "c49e96a5-fff1-4c8d-9d91-9fbf190d47da",
-      "title": "estudar",
-      "time": "morning",
-      "description": "react",
-      "status": "not_started"
-    },
-    {
       "id": "a8cad22a-bd0b-4b05-acaf-c758aa447416",
       "title": "Academia",
       "time": "evening",
       "description": "corrida",
+      "status": "not_started"
+    },
+    {
+      "id": "60f2a941-a5c3-4a45-9d42-51ce960d78ab",
+      "title": "Viagem",
+      "time": "morning",
+      "description": "Rj",
+      "status": "not_started"
+    },
+    {
+      "id": "32ce6b82-6ca8-4163-832a-34beac0ab8b3",
+      "title": "estudar",
+      "time": "morning",
+      "description": "java",
       "status": "not_started"
     }
   ]

@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -15,9 +14,11 @@ import Button from '../components/Button.jsx'
 import Input from '../components/Input.jsx'
 import SideBar from '../components/SideBar.jsx'
 import TimeSelect from '../components/TimeSelect.jsx'
+import { useDeleteTask } from '../hooks/data/use-delete-task.js'
+import { useGetTask } from '../hooks/data/use-get-task.js'
+import { useUpdateTask } from '../hooks/data/use-update-task.js'
 
 const TaskDetailsPage = () => {
-  const queryClient = useQueryClient()
   const { taskId } = useParams()
   const navigate = useNavigate()
 
@@ -28,68 +29,19 @@ const TaskDetailsPage = () => {
     reset,
   } = useForm()
 
-  // =============== UPDATE TASK ===============
-  const { mutate: updateTask, isPending: updateIsLoading } = useMutation({
-    mutationKey: ['updateTask', taskId],
-    mutationFn: async (data) => {
-      // 🔥 força o loader a aparecer por mais tempo
-      await new Promise((resolve) => setTimeout(resolve, 1200))
+  const { mutate: updateTask, isPending: updateIsLoading } =
+    useUpdateTask(taskId)
 
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: data.title.trim(),
-          description: data.description.trim(),
-          time: data.time,
-        }),
-      })
+  const { mutate: deleteTask, isPending: deleteIsLoading } =
+    useDeleteTask(taskId)
 
-      if (!response.ok) throw new Error()
-
-      const updatedTask = await response.json()
-
-      queryClient.setQueryData(['tasks'], (oldTasks = []) =>
-        oldTasks.map((oldTask) =>
-          oldTask.id === taskId ? updatedTask : oldTask
-        )
-      )
-
-      return updatedTask
-    },
-  })
-
-  // =============== DELETE TASK (FALTAVA!) ===============
-  const { mutate: deleteTask, isPending: deleteIsLoading } = useMutation({
-    mutationKey: ['deleteTask', taskId],
-    mutationFn: async () => {
-      const response = await fetch(`http://127.0.0.1:3000/tasks/${taskId}`, {
-        method: 'DELETE',
-      })
-      if (!response.ok) throw new Error()
-
-      const deletedTask = await response.json()
-      queryClient.setQueryData(['tasks'], (oldTasks = []) => {
-        return oldTasks.filter((oldTask) => oldTask.id !== deletedTask.id)
-      })
-
-      return true
-    },
-  })
-
-  // =============== GET TASK ===============
-  const { data: task, isLoading } = useQuery({
-    queryKey: ['task', taskId],
-    queryFn: async () => {
-      const res = await fetch(`http://127.0.0.1:3000/tasks/${taskId}`)
-      if (!res.ok) throw new Error('Erro ao carregar tarefa')
-      return await res.json()
-    },
-    onSuccess: (data) => reset(data),
+  const { data: task, isLoading } = useGetTask({
+    taskId,
+    onSuccess: (task) => reset(task),
   })
 
   const handleBackClick = () => navigate(-1)
-  // =============== SAVE HANDLER ===============
+
   const handleSaveClick = (data) => {
     updateTask(data, {
       onSuccess: () => {
