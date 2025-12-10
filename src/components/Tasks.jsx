@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
@@ -10,6 +10,7 @@ import {
   SunIcon,
   TrashIcon,
 } from '../assets/icons/index.js'
+import { useGetTasks } from '../hooks/data/use-get-tasks.js'
 import AddTaskDialog from './AddTaskDialog.jsx'
 import Button from './Button.jsx'
 import TaskItem from './TaskItem.jsx'
@@ -18,13 +19,8 @@ import TasksSeparator from './TaskSeparator.jsx'
 const Tasks = () => {
   const queryClient = useQueryClient()
 
-  const { data: tasks = [] } = useQuery({
-    queryKey: ['tasks'],
-    queryFn: async () => {
-      const response = await fetch('http://127.0.0.1:3000/tasks')
-      return await response.json()
-    },
-  })
+  // 🔥 Fallback seguro evita crash
+  const { data: tasks = [] } = useGetTasks()
 
   const [addTaskDialogIsOpen, setAddTaskDialogIsOpen] = useState(false)
 
@@ -34,9 +30,8 @@ const Tasks = () => {
 
   const handleDialogClose = () => setAddTaskDialogIsOpen(false)
 
-  // ✅ FUNÇÃO RESTAURADA
   const onDeleteTaskSuccess = (taskId) => {
-    queryClient.setQueryData(['tasks'], (old) =>
+    queryClient.setQueryData(['tasks'], (old = []) =>
       old.filter((task) => task.id !== taskId)
     )
     toast.success('Tarefa deletada com sucesso!')

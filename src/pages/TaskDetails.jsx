@@ -89,28 +89,7 @@ const TaskDetailsPage = () => {
   })
 
   const handleBackClick = () => navigate(-1)
-
-  // =============== SAVE (PATCH SEM MUTATION) ===============
-  // const handleSaveClick = async (data) => {
-  //   try {
-  //     await new Promise((resolve) => setTimeout(resolve, 1200))
-
-  //     const response = await fetch(`http://127.0.0.1:3000/tasks/${taskId}`, {
-  //       method: "PATCH",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(data),
-  //     })
-
-  //     if (!response.ok) {
-  //       return toast.error("Erro ao salvar a tarefa.")
-  //     }
-
-  //     await response.json()
-  //     toast.success("Tarefa atualizada!")
-  //   } catch {
-  //     toast.error("Falha ao conectar ao servidor.")
-  //   }
-  // }
+  // =============== SAVE HANDLER ===============
   const handleSaveClick = (data) => {
     updateTask(data, {
       onSuccess: () => {

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -10,24 +10,17 @@ import {
   LoaderIcon,
   TrashIcon,
 } from '../assets/icons/index.js'
+import { useDeleteTask } from '../hooks/data/use-delete-task.js'
 import Button from './Button.jsx'
 
 const TaskItem = ({ task, handleCheckBoxChange, onDeleteSucess }) => {
-  const queryClient = useQueryClient()
-
-  const { mutate, isPending } = useMutation({
-    mutationKey: ['deleteTask', task.id],
-    mutationFn: async () => {
-      await fetch(`http://127.0.0.1:3000/tasks/${task.id}`, {
-        method: 'DELETE',
-      })
-    },
-  })
+  const { mutate: deleteTask, isPending } = useDeleteTask(task.id)
 
   const handleDeleteClick = () => {
-    mutate(undefined, {
+    deleteTask(undefined, {
       onSuccess: () => {
-        onDeleteSucess()
+        toast.success('Tarefa deletada com sucesso!')
+        onDeleteSucess(task.id)
       },
       onError: () => {
         toast.error('Erro ao deletar a tarefa. Tente novamente.')
