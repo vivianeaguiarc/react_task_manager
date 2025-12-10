@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 // eslint-disable-next-line no-unused-vars
 
-import SideBar from "./components/SideBar"
-import Tasks from "./components/Tasks"
+import SideBar from '../components/SideBar'
+import Tasks from '../components/Tasks'
 
-function App() {
+function TasksPage() {
   return (
     <div className="flex">
       <SideBar />
@@ -13,4 +13,4 @@ function App() {
   )
 }
 
-export default App
+export default TasksPage
