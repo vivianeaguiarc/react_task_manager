@@ -4,38 +4,18 @@ import { toast } from 'sonner'
 
 import { CloudSunIcon, MoonIcon, SunIcon } from '../assets/icons/index.js'
 import { useGetTasks } from '../hooks/data/use-get-tasks.js'
+import { useUpdateTask } from '../hooks/data/use-update-task.js'
 import { taskQueryKey } from '../keys/queries.js'
 import Header from './Header.jsx'
 import TaskItem from './TaskItem.jsx'
 import TasksSeparator from './TaskSeparator.jsx'
 
 const Tasks = () => {
-  const queryClient = useQueryClient()
   const { data: tasks = [] } = useGetTasks()
 
   const morningTasks = tasks.filter((t) => t.time === 'morning')
   const afternoonTasks = tasks.filter((t) => t.time === 'afternoon')
   const nightTasks = tasks.filter((t) => t.time === 'evening')
-
-  const onDeleteTaskSuccess = (taskId) => {
-    queryClient.setQueryData(['tasks'], (old = []) =>
-      old.filter((task) => task.id !== taskId)
-    )
-    toast.success('Tarefa deletada com sucesso!')
-  }
-
-  const handleTaskCheckBoxChange = (taskId) => {
-    const updated = tasks.map((task) => {
-      if (task.id !== taskId) return task
-
-      if (task.status === 'not_started')
-        return { ...task, status: 'in_progress' }
-      if (task.status === 'in_progress') return { ...task, status: 'done' }
-      return { ...task, status: 'not_started' }
-    })
-
-    queryClient.setQueryData(taskQueryKey.getAll(), updated)
-  }
 
   return (
     <div className="w-full space-y-6 px-8 py-16">
@@ -55,12 +35,7 @@ const Tasks = () => {
           )}
 
           {morningTasks.map((task) => (
-            <TaskItem
-              key={task.id}
-              task={task}
-              handleCheckBoxChange={handleTaskCheckBoxChange}
-              onDeleteSucess={() => onDeleteTaskSuccess(task.id)}
-            />
+            <TaskItem key={task.id} task={task} />
           ))}
         </div>
 
@@ -75,12 +50,7 @@ const Tasks = () => {
           )}
 
           {afternoonTasks.map((task) => (
-            <TaskItem
-              key={task.id}
-              task={task}
-              handleCheckBoxChange={handleTaskCheckBoxChange}
-              onDeleteSucess={() => onDeleteTaskSuccess(task.id)}
-            />
+            <TaskItem key={task.id} task={task} />
           ))}
         </div>
 
@@ -95,12 +65,7 @@ const Tasks = () => {
           )}
 
           {nightTasks.map((task) => (
-            <TaskItem
-              key={task.id}
-              task={task}
-              handleCheckBoxChange={handleTaskCheckBoxChange}
-              onDeleteSucess={() => onDeleteTaskSuccess(task.id)}
-            />
+            <TaskItem key={task.id} task={task} />
           ))}
         </div>
       </div>

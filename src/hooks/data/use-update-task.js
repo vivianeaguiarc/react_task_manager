@@ -8,14 +8,15 @@ export const useUpdateTask = (taskId) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationKey: taskMutationKeys.update(taskId),
-    mutationFn: async (newTask) => {
+    mutationFn: async (data) => {
       // 🔥 força o loader a aparecer por mais tempo
       await new Promise((resolve) => setTimeout(resolve, 1200))
 
       const { data: updatedTask } = await api.patch(`/tasks/${taskId}`, {
-        title: newTask.title.trim(),
-        description: newTask.description.trim(),
-        time: newTask.time,
+        title: data?.title?.trim(),
+        description: data?.description?.trim(),
+        time: data?.time,
+        status: data?.status,
       })
       queryClient.setQueryData(taskQueryKey.getAll(), (oldTasks) => {
         return oldTasks.map((task) => {

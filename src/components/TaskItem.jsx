@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import { useQueryClient } from '@tanstack/react-query'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -11,21 +10,41 @@ import {
   TrashIcon,
 } from '../assets/icons/index.js'
 import { useDeleteTask } from '../hooks/data/use-delete-task.js'
+import { useUpdateTask } from '../hooks/data/use-update-task.js'
 import Button from './Button.jsx'
 
-const TaskItem = ({ task, handleCheckBoxChange, onDeleteSucess }) => {
+const TaskItem = ({ task }) => {
   const { mutate: deleteTask, isPending } = useDeleteTask(task.id)
+  const { mutate } = useUpdateTask(task.id)
 
   const handleDeleteClick = () => {
     deleteTask(undefined, {
       onSuccess: () => {
         toast.success('Tarefa deletada com sucesso!')
-        onDeleteSucess(task.id)
       },
       onError: () => {
         toast.error('Erro ao deletar a tarefa. Tente novamente.')
       },
     })
+  }
+  const getNewStatus = () => {
+    if (task.status === 'done') return 'not_started'
+    if (task.status === 'in_progress') return 'done'
+    if (task.status === 'not_started') return 'in_progress'
+    return 'not_started'
+  }
+  const handleCheckBoxChange = () => {
+    mutate(
+      { status: getNewStatus() },
+      {
+        onSuccess: () => {
+          toast.success('Tarefa atualizada com sucesso!')
+        },
+        onError: () => {
+          toast.error('Erro ao atualizar a tarefa. Tente novamente.')
+        },
+      }
+    )
   }
   const getStatusClasses = () => {
     if (task.status === 'done') return 'bg-brand-primary/10 text-brand-primary'
@@ -50,7 +69,7 @@ const TaskItem = ({ task, handleCheckBoxChange, onDeleteSucess }) => {
             type="checkbox"
             checked={task.status === 'done'}
             className="absolute h-full w-full cursor-pointer opacity-0"
-            onChange={() => handleCheckBoxChange(task.id)}
+            onChange={handleCheckBoxChange}
           />
 
           {task.status === 'done' && <CheckIcon />}

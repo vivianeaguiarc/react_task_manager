@@ -5,7 +5,7 @@
       "title": "Estagio",
       "time": "afternoon",
       "description": "Fullstack",
-      "status": "not_started"
+      "status": "done"
     },
     {
       "id": "a8cad22a-bd0b-4b05-acaf-c758aa447416",
@@ -16,17 +16,17 @@
     },
     {
       "id": "60f2a941-a5c3-4a45-9d42-51ce960d78ab",
-      "title": "Viagem",
+      "title": "França",
       "time": "morning",
       "description": "Rj",
-      "status": "not_started"
+      "status": "done"
     },
     {
       "id": "0b19b54e-2032-484c-9437-0b65d204df1c",
       "title": "Atualidades",
       "time": "morning",
       "description": "Biblia",
-      "status": "not_started"
+      "status": "in_progress"
     }
   ]
 }
