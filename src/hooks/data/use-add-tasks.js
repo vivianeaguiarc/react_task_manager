@@ -9,16 +9,14 @@ export const useAddTask = () => {
 
   return useMutation({
     mutationKey: taskMutationKeys.add(),
+
     mutationFn: async (task) => {
-      const { data: createdTask } = await api.post('/tasks', task)
-      return createdTask
+      const { data } = await api.post('/tasks', task)
+      return data
     },
 
-    onSuccess: (createdTask) => {
-      queryClient.setQueryData(taskQueryKey.getAll(), (oldTasks = []) => [
-        ...oldTasks,
-        createdTask,
-      ])
+    onSuccess: () => {
+      queryClient.invalidateQueries(taskQueryKey.getAll())
     },
   })
 }

@@ -9,14 +9,15 @@ export const useDeleteTask = (taskId) => {
 
   return useMutation({
     mutationKey: taskMutationKeys.delete(taskId),
+
     mutationFn: async () => {
-      const { data: deletedTask } = await api.delete(`/tasks/${taskId}`)
-      return deletedTask
+      await api.delete(`/tasks/${taskId}`)
+      return taskId // ← devolve apenas o ID
     },
 
-    onSuccess: (deletedTask) => {
+    onSuccess: (deletedId) => {
       queryClient.setQueryData(taskQueryKey.getAll(), (oldTasks = []) =>
-        oldTasks.filter((task) => task.id !== deletedTask.id)
+        oldTasks.filter((task) => task.id !== deletedId)
       )
     },
   })
